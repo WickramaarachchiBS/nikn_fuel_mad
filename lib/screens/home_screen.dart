@@ -20,23 +20,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: SearchAnchor(
-        builder: (BuildContext context, SearchController controller,) {
-          return SearchBar(
-            controller: controller,
-            padding: const WidgetStatePropertyAll<EdgeInsets>(
-              EdgeInsets.symmetric(horizontal: 16.0),
-            ),
-            onTap: () {
-              controller.openView();
-            },
-            onChanged: (_) {
-              controller.openView();
-            },
-            leading: const Icon(Icons.search),
-          );
-        },
-      ),
     );
   }
 }
