@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     CenterWidget(
                       color: const Color.fromARGB(255, 61, 15, 15),
-                      icon: Icons.local_gas_station_outlined,
+                      icon: Icons.explore,
                       title: 'Fuel Stations',
                     ),
                     CenterWidget(
