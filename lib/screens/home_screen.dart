@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nikn_fuel/components/centerwidgets.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -75,41 +76,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(10.0),
-                      width: 170.0,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 62, 129, 88),
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      child: Text(
-                        'What would you like to do today?',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                      ),
+                    CenterWidget(
+                      icon: Icons.local_gas_station_outlined,
+                      title: 'Fuel Stations',
                     ),
-                    Container(
-                      padding: EdgeInsets.all(10.0),
-                      width: 170.0,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 62, 111, 151),
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      child: Text(
-                        'What would you like to do today?',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                      ),
+                    CenterWidget(
+                      icon: Icons.local_gas_station_outlined,
+                      title: 'Mobile Fuel \nDistributer',
                     ),
                   ],
                 ),
@@ -117,41 +90,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(10.0),
-                      width: 170.0,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 36, 201, 58),
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      child: Text(
-                        'What would you like to do today?',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                      ),
+                    CenterWidget(
+                      icon: Icons.garage_outlined,
+                      title: 'Service Stations',
                     ),
-                    Container(
-                      padding: EdgeInsets.all(10.0),
-                      width: 170.0,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 74, 45, 100),
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      child: Text(
-                        'What would you like to do today?',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                      ),
+                    CenterWidget(
+                      icon: Icons.redeem,
+                      title: 'Deals',
                     ),
                   ],
                 ),
