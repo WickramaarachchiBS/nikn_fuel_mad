@@ -1,5 +1,8 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:nikn_fuel/components/centerwidgets.dart';
+import 'package:nikn_fuel/components/center_widgets.dart';
+import 'package:nikn_fuel/components/bottom_widget.dart';
+// import 'package:nikn_fuel/components/navigation.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,6 +14,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final items = <Widget>[
+      Icon(Icons.home_outlined, color: Color.fromARGB(255, 255, 255, 255)),
+      Icon(Icons.ev_station_outlined, color: Color.fromARGB(255, 255, 255, 255)),
+      Icon(Icons.location_on_outlined, color: Color.fromARGB(255, 255, 255, 255)),
+      Icon(Icons.person_outlined, color: Color.fromARGB(255, 255, 255, 255)),
+    ];
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       appBar: AppBar(
@@ -105,10 +115,50 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            Row(),
-            Row(),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  'Journey',
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                  ),
+                ),
+                Text(
+                  'Fuel Type',
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                  ),
+                ),
+                Text(
+                  'Charging',
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                  ),
+                ),
+                Text(
+                  'Payments',
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            BottomWidget(),
+            // NavBar(),
           ],
         ),
+      ),
+      bottomNavigationBar: CurvedNavigationBar(
+        items: items,
+        height: 60.0,
+        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+        buttonBackgroundColor: const Color.fromARGB(255, 65, 50, 50),
+        color: Color.fromARGB(255, 59, 59, 59),
+        animationCurve: Curves.easeInOut,
+        animationDuration: Duration(milliseconds: 400),
       ),
     );
   }
