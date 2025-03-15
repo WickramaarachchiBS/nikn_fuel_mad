@@ -28,8 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             SearchBar(
-              backgroundColor:
-                  WidgetStatePropertyAll(const Color.fromARGB(255, 46, 46, 46)),
+              backgroundColor: WidgetStatePropertyAll(const Color.fromARGB(255, 46, 46, 46)),
               hintText: '',
               leading: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -77,10 +76,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     CenterWidget(
+                      color: const Color.fromARGB(255, 61, 15, 15),
                       icon: Icons.local_gas_station_outlined,
                       title: 'Fuel Stations',
                     ),
                     CenterWidget(
+                      color: const Color.fromARGB(193, 9, 38, 82),
                       icon: Icons.local_gas_station_outlined,
                       title: 'Mobile Fuel \nDistributer',
                     ),
@@ -91,10 +92,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     CenterWidget(
+                      color: const Color.fromARGB(255, 17, 53, 33),
                       icon: Icons.garage_outlined,
                       title: 'Service Stations',
                     ),
                     CenterWidget(
+                      color: const Color.fromARGB(255, 49, 19, 63),
                       icon: Icons.redeem,
                       title: 'Deals',
                     ),

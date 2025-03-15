@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CenterWidget extends StatelessWidget {
-  const CenterWidget({super.key,required this.color, required this.icon, required this.title});
+  const CenterWidget({super.key, required this.color, required this.icon, required this.title});
 
   final Color color;
   final IconData icon;
@@ -14,7 +14,7 @@ class CenterWidget extends StatelessWidget {
       width: 170.0,
       height: 100,
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 10, 43, 22),
+        color: color,
         borderRadius: BorderRadius.circular(18.0),
       ),
       child: Stack(
