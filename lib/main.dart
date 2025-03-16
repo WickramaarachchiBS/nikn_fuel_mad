@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nikn_fuel/screens/home_screen.dart';
 import 'package:nikn_fuel/screens/welcome_screen.dart';
 import 'package:nikn_fuel/screens/signin_sceen.dart';
+import 'package:nikn_fuel/screens/signup_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/welcome': (context) => const WelcomeScreen(),
         '/signin': (context) => const SignInScreen(),
+        '/signup': (context) => const SignUpScreen(),
       },
     );
   }

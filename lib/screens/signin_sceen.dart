@@ -40,7 +40,7 @@ class _SignInScreenState extends State<SignInScreen> {
             SizedBox(height: 20),
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/home');
+                Navigator.pushNamed(context, '/signup');
               },
               child: Text('Forgot Password?'),
             ),
