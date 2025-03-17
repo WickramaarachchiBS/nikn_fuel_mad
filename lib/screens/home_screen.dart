@@ -1,9 +1,9 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:nikn_fuel/screens/homeScreenContent/HomeContent.dart';
+import 'package:nikn_fuel/screens/homeScreenContent/home_content.dart';
 import 'package:nikn_fuel/screens/homeScreenContent/location_content.dart';
-import 'package:nikn_fuel/screens/homeScreenContent/FuelContent.dart';
-import 'package:nikn_fuel/screens/homeScreenContent/ProfileContent.dart';
+import 'package:nikn_fuel/screens/homeScreenContent/fuel_content.dart';
+import 'package:nikn_fuel/screens/homeScreenContent/profile_content.dart';
 
 // import 'package:nikn_fuel/components/navigation.dart';
 

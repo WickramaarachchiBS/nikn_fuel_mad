@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({Key? key});
+  const SignInScreen({super.key});
 
   @override
   _SignInScreenState createState() => _SignInScreenState();
@@ -40,12 +40,14 @@ class _SignInScreenState extends State<SignInScreen> {
             SizedBox(height: 20),
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/signup');
+
               },
               child: Text('Forgot Password?'),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/sign_up');
+              },
               child: Text('Create Account'),
             ),
           ],
