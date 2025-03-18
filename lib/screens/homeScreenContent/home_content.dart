@@ -1,50 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:nikn_fuel/components/bottom_widget.dart';
 import 'package:nikn_fuel/components/center_widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeContent extends StatelessWidget {
   const HomeContent({
     super.key,
   });
 
+  // Get the current user's name or username from email
+  String _getUserName() {
+    final User? user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      return 'User';
+    }
+
+    if (user.displayName != null && user.displayName!.isNotEmpty) {
+      return user.displayName!;
+    } else if (user.email != null) {
+      // Extract username from email (part before @)
+      return user.email!.split('@')[0];
+    } else {
+      return 'User';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final String userName = _getUserName();
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(0.0),
       child: Column(
         children: [
-          SearchBar(
-            backgroundColor: WidgetStatePropertyAll(const Color.fromARGB(255, 46, 46, 46)),
-            hintText: '',
-            leading: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.search,
-                color: Colors.red,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: SearchBar(
+              backgroundColor: WidgetStatePropertyAll(const Color.fromARGB(255, 46, 46, 46)),
+              hintText: '',
+              leading: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.search,
+                  color: Colors.red,
+                ),
               ),
-            ),
-            shape: WidgetStatePropertyAll(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
+              shape: WidgetStatePropertyAll(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                ),
               ),
             ),
           ),
-          SizedBox(height: 30),
+          SizedBox(height: 25.0),
           Container(
             padding: EdgeInsets.only(left: 10),
             alignment: Alignment.centerLeft,
             child: Text.rich(
               TextSpan(
-                text: 'Hello User ',
+                text: 'Hello ',
                 style: TextStyle(
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.w700,
                   fontSize: 28,
-                  color: const Color.fromARGB(255, 255, 255, 255),
+                  color: Colors.grey.shade500,
                 ),
                 children: [
                   TextSpan(
-                    text: '!',
+                    text: userName,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: Colors.grey.shade200,
+                    ),
+                  ),
+                  const TextSpan(
+                    text: ' !',
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: Colors.red,
@@ -63,13 +93,13 @@ class HomeContent extends StatelessWidget {
                 children: [
                   CenterWidget(
                     color: const Color.fromARGB(255, 61, 15, 15),
-                    icon: Icons.explore,
+                    icon: Icons.local_gas_station,
                     title: 'Fuel Stations',
                   ),
                   CenterWidget(
-                    color: const Color.fromARGB(193, 9, 38, 82),
-                    icon: Icons.local_gas_station_outlined,
-                    title: 'Mobile Fuel \nDistributer',
+                    color: const Color.fromARGB(255, 113, 93, 43),
+                    icon: Icons.ev_station,
+                    title: 'EV Stations',
                   ),
                 ],
               ),
@@ -88,6 +118,20 @@ class HomeContent extends StatelessWidget {
                     title: 'Deals',
                   ),
                 ],
+              ),
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.only(right: 18.0, left: 18.0, top: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    CenterWidget2(
+                      color: const Color.fromARGB(193, 9, 38, 82),
+                      icon: Icons.fast,
+                      title: 'Mobile Fuel \nDistributer',
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

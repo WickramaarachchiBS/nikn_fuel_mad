@@ -1,9 +1,11 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:nikn_fuel/screens/homeScreenContent/home_content.dart';
 import 'package:nikn_fuel/screens/homeScreenContent/location_content.dart';
 import 'package:nikn_fuel/screens/homeScreenContent/fuel_content.dart';
 import 'package:nikn_fuel/screens/homeScreenContent/profile_content.dart';
+import 'package:nikn_fuel/services/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 // import 'package:nikn_fuel/components/navigation.dart';
 
@@ -15,6 +17,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _auth = FirebaseAuth.instance;
+  late User loggedInUser;
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
+
+  void getCurrentUser() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        loggedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   int _currentIndex = 0;
   final List<Widget> _pages = [
     HomeContent(),
@@ -25,10 +47,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final items = <Widget>[
+    final bottomItems = <Widget>[
       Icon(Icons.home_outlined, color: Color.fromARGB(255, 255, 255, 255)),
       Icon(Icons.ev_station_outlined, color: Color.fromARGB(255, 255, 255, 255)),
-      Icon(Icons.location_on_outlined, color: Color.fromARGB(255, 255, 255, 255)),
+      Icon(Icons.explore, color: Color.fromARGB(255, 255, 255, 255)),
       Icon(Icons.person_outlined, color: Color.fromARGB(255, 255, 255, 255)),
     ];
 
@@ -49,11 +71,23 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(right: 1.0),
             child: Icon(Icons.menu, color: Colors.white),
           ),
+          SizedBox(width: 10.0),
+          IconButton(
+            onPressed: () {
+              _auth.signOut();
+              // Navigator.pop(context);
+              Navigator.pushReplacementNamed(context, '/sign_in');
+            },
+            icon: Icon(Icons.logout),
+            color: Colors.white,
+          ),
         ],
       ),
-      body: _pages[_currentIndex],
+      body: SingleChildScrollView(
+        child: _pages[_currentIndex],
+      ),
       bottomNavigationBar: CurvedNavigationBar(
-        items: items,
+        items: bottomItems,
         index: _currentIndex,
         height: 60.0,
         backgroundColor: const Color.fromARGB(255, 0, 0, 0),
