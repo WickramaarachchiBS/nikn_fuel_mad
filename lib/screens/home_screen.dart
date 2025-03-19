@@ -54,52 +54,54 @@ class _HomeScreenState extends State<HomeScreen> {
       Icon(Icons.person_outlined, color: Color.fromARGB(255, 255, 255, 255)),
     ];
 
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-      appBar: AppBar(
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-        leading: Icon(Icons.arrow_back_ios, color: Colors.white),
-        title: Text(
-          'Nikn Fuel',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+          leading: Icon(Icons.arrow_back_ios, color: Colors.white),
+          title: Text(
+            'Nikn Fuel',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            ),
           ),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 1.0),
+              child: Icon(Icons.menu, color: Colors.white),
+            ),
+            SizedBox(width: 10.0),
+            IconButton(
+              onPressed: () {
+                _auth.signOut();
+                // Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/sign_in');
+              },
+              icon: Icon(Icons.logout),
+              color: Colors.white,
+            ),
+          ],
         ),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 1.0),
-            child: Icon(Icons.menu, color: Colors.white),
-          ),
-          SizedBox(width: 10.0),
-          IconButton(
-            onPressed: () {
-              _auth.signOut();
-              // Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/sign_in');
-            },
-            icon: Icon(Icons.logout),
-            color: Colors.white,
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: _pages[_currentIndex],
-      ),
-      bottomNavigationBar: CurvedNavigationBar(
-        items: bottomItems,
-        index: _currentIndex,
-        height: 60.0,
-        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-        buttonBackgroundColor: const Color.fromARGB(255, 65, 50, 50),
-        color: Color.fromARGB(255, 59, 59, 59),
-        animationCurve: Curves.easeInOut,
-        animationDuration: Duration(milliseconds: 400),
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+        body: SingleChildScrollView(
+          child: _pages[_currentIndex],
+        ),
+        bottomNavigationBar: CurvedNavigationBar(
+          items: bottomItems,
+          index: _currentIndex,
+          height: 60.0,
+          backgroundColor: Colors.transparent,
+          buttonBackgroundColor: const Color.fromARGB(255, 65, 50, 50),
+          color: Color.fromARGB(255, 59, 59, 59),
+          animationCurve: Curves.easeInOut,
+          animationDuration: Duration(milliseconds: 400),
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+        ),
       ),
     );
   }

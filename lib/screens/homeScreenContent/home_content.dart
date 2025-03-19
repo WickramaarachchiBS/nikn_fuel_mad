@@ -85,6 +85,8 @@ class HomeContent extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
+
+          // widgets
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -92,11 +94,17 @@ class HomeContent extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CenterWidget(
+                    onTapped: () {
+                      Navigator.pushNamed(context, '/fuel_stations');
+                    },
                     color: const Color.fromARGB(255, 61, 15, 15),
                     icon: Icons.local_gas_station,
                     title: 'Fuel Stations',
                   ),
                   CenterWidget(
+                    onTapped: () {
+                      Navigator.pushNamed(context, '/ev_stations');
+                    },
                     color: const Color.fromARGB(255, 113, 93, 43),
                     icon: Icons.ev_station,
                     title: 'EV Stations',
@@ -108,11 +116,17 @@ class HomeContent extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CenterWidget(
+                    onTapped: () {
+                      Navigator.pushNamed(context, '/service_stations');
+                    },
                     color: const Color.fromARGB(255, 17, 53, 33),
                     icon: Icons.garage_outlined,
                     title: 'Service Stations',
                   ),
                   CenterWidget(
+                    onTapped: () {
+                      Navigator.pushNamed(context, '/deals');
+                    },
                     color: const Color.fromARGB(255, 49, 19, 63),
                     icon: Icons.redeem,
                     title: 'Deals',
@@ -126,8 +140,11 @@ class HomeContent extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     CenterWidget2(
+                      onTapped: () {
+                        Navigator.pushNamed(context, '/fuel_distributer');
+                      },
                       color: const Color.fromARGB(193, 9, 38, 82),
-                      icon: Icons.fast,
+                      icon: Icons.local_shipping,
                       title: 'Mobile Fuel \nDistributer',
                     ),
                   ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CenterWidget extends StatelessWidget {
-  const CenterWidget({super.key, required this.color, required this.icon, required this.title});
+  const CenterWidget({super.key, required this.color, required this.icon, required this.title, required Function() onTapped});
 
   final Color color;
   final IconData icon;
@@ -49,7 +49,7 @@ class CenterWidget extends StatelessWidget {
 }
 
 class CenterWidget2 extends StatelessWidget {
-  const CenterWidget2({super.key, required this.color, required this.icon, required this.title});
+  const CenterWidget2({super.key, required this.color, required this.icon, required this.title, required Function() onTapped});
 
   final Color color;
   final IconData icon;
