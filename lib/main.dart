@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nikn_fuel/screens/dynamic_screen.dart';
 import 'package:nikn_fuel/screens/evstations_screen.dart';
+import 'package:nikn_fuel/screens/servicestations_screen.dart';
 import 'package:nikn_fuel/screens/welcome_screen.dart';
 import 'package:nikn_fuel/screens/signin_sceen.dart';
 import 'package:nikn_fuel/screens/signup_screen.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         '/sign_up': (context) => const SignUpScreen(),
         '/fuel_stations': (context) => const GasStationsScreen(),
         '/ev_stations': (context) => const EvStationsScreen(),
+        '/service_stations': (context) => const ServiceStationsScreen(),
       },
     );
   }

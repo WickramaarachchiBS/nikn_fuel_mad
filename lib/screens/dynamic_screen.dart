@@ -56,7 +56,7 @@ class _DynamicScreenState extends State<DynamicScreen> {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 120, 120, 120),
+        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 0, 0, 0),
           title: Text(

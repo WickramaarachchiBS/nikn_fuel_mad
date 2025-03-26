@@ -5,48 +5,46 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 
-class EvStationsScreen extends StatefulWidget {
-  const EvStationsScreen({super.key});
+class ServiceStationsScreen extends StatefulWidget {
+  const ServiceStationsScreen({super.key});
 
   @override
-  State<EvStationsScreen> createState() => _EvStationsScreenState();
+  State<ServiceStationsScreen> createState() => _ServiceStationsScreenState();
 }
 
-class _EvStationsScreenState extends State<EvStationsScreen> {
+class _ServiceStationsScreenState extends State<ServiceStationsScreen> {
   GoogleMapController? mapController;
   Set<Marker> _markers = {};
   LatLng? _initialPosition;
 
-  // static const initialLocation = LatLng(37.7749, -122.4194);
-
   @override
   void initState() {
     super.initState();
-    _loadLocationAndFuelStations();
+    _loadLocationAndServiceStations();
   }
 
-  Future<void> _loadLocationAndFuelStations() async {
+  Future<void> _loadLocationAndServiceStations() async {
     try {
       Position position = await _getCurrentLocation();
       setState(() {
         _initialPosition = LatLng(position.latitude, position.longitude);
       });
-      // print(_initialPosition);
 
-      // Fetch nearby EV stations
-      List<dynamic> evStations = await getNearbyEvStations(position.latitude, position.longitude);
+      // Fetch nearby service stations
+      List<dynamic> serviceStations = await getNearbyServiceStations(position.latitude, position.longitude);
       setState(() {
-        _markers = evStations.map((station) {
+        _markers = serviceStations.map((station) {
           final lat = station['geometry']['location']['lat'];
           final lng = station['geometry']['location']['lng'];
           final name = station['name'] ?? 'Unnamed Station';
           return Marker(
-              markerId: MarkerId(name),
-              position: LatLng(lat, lng),
-              infoWindow: InfoWindow(title: name),
-              onTap: () {
-                _showStationModal(station);
-              });
+            markerId: MarkerId(name),
+            position: LatLng(lat, lng),
+            infoWindow: InfoWindow(title: name),
+            onTap: () {
+              _showStationModal(station);
+            },
+          );
         }).toSet();
         if (_initialPosition != null) {
           _markers.add(
@@ -75,7 +73,7 @@ class _EvStationsScreenState extends State<EvStationsScreen> {
         return SafeArea(
           child: Container(
             decoration: BoxDecoration(
-              color: Color(0xFF2B2002),
+              color: const Color(0xFF2B2002),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
@@ -85,22 +83,23 @@ class _EvStationsScreenState extends State<EvStationsScreen> {
                   color: Colors.black.withOpacity(0.5),
                   spreadRadius: 5,
                   blurRadius: 7,
-                  offset: const Offset(0, 3), // changes position of shadow
+                  offset: const Offset(0, 3),
                 ),
               ],
             ),
             padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Icon(Icons.location_on_outlined, color: Colors.amberAccent),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
+            child: SingleChildScrollView(
+              // Added to handle overflow
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.car_repair, color: Colors.amberAccent), // Updated icon to car repair
+                      const SizedBox(width: 10),
+                      Text(
                         name,
                         style: const TextStyle(
                           fontSize: 23,
@@ -108,51 +107,51 @@ class _EvStationsScreenState extends State<EvStationsScreen> {
                           color: Colors.amber,
                         ),
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Latitude: $lat',
+                          style: const TextStyle(fontSize: 12, color: Colors.white),
+                        ),
+                        const SizedBox(width: 20),
+                        Text(
+                          'Longitude: $lng',
+                          style: const TextStyle(fontSize: 12, color: Colors.white),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Row(
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
-                        'Latitude: $lat',
-                        style: TextStyle(fontSize: 12, color: Colors.white),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.amber),
+                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                          elevation: MaterialStateProperty.all<double>(5),
+                        ),
+                        onPressed: () => _openInMaps(lat, lng),
+                        child: const Text('Open in Maps'),
                       ),
-                      const SizedBox(width: 20),
-                      Text(
-                        'Longitude: $lng',
-                        style: TextStyle(fontSize: 12, color: Colors.white),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.amber),
+                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                          elevation: MaterialStateProperty.all<double>(5),
+                        ),
+                        onPressed: () => _getDirections(lat, lng),
+                        child: const Text('Directions'),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.amber),
-                        foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                        elevation: MaterialStateProperty.all<double>(5),
-                      ),
-                      onPressed: () => _openInMaps(lat, lng),
-                      child: const Text('Open in Maps'),
-                    ),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.amber),
-                        foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                        elevation: MaterialStateProperty.all<double>(5),
-                      ),
-                      onPressed: () => _getDirections(lat, lng),
-                      child: const Text('Directions'),
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
@@ -184,23 +183,20 @@ class _EvStationsScreenState extends State<EvStationsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: Icon(
-          Icons.ev_station_outlined,
+        leading: const Icon(
+          Icons.car_repair, // Updated icon to car repair
           color: Colors.amberAccent,
         ),
-        title: Text(
-          'Nearby Charging Stations',
+        title: const Text(
+          'Nearby Service Stations', // Updated title
           style: TextStyle(color: Colors.white),
         ),
       ),
       body: _initialPosition == null
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : SafeArea(
               child: GoogleMap(
                 initialCameraPosition: CameraPosition(
@@ -217,7 +213,7 @@ class _EvStationsScreenState extends State<EvStationsScreen> {
   }
 }
 
-// getting the current location
+// Getting the current location
 Future<Position> _getCurrentLocation() async {
   bool serviceEnabled;
   LocationPermission permission;
@@ -245,11 +241,11 @@ Future<Position> _getCurrentLocation() async {
   return await Geolocator.getCurrentPosition();
 }
 
-//Fetch nearby ev stations
-Future<List<dynamic>> getNearbyEvStations(double latitude, double longitude) async {
-  const apiKey = 'AIzaSyCR9dYjrGjgAZtTIWvOO1U5oKoMtySuUR8';
+// Fetch nearby service stations
+Future<List<dynamic>> getNearbyServiceStations(double latitude, double longitude) async {
+  const apiKey = 'AIzaSyCR9dYjrGjgAZtTIWvOO1U5oKoMtySuUR8'; // Replace with your actual API key
   const radius = 5000; // 5 km radius
-  const type = 'charging_station'; // Type of place to search for
+  const type = 'car_repair'; // Changed to service stations
 
   final url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&type=$type&key=$apiKey';
 
@@ -259,6 +255,8 @@ Future<List<dynamic>> getNearbyEvStations(double latitude, double longitude) asy
     final data = jsonDecode(response.body);
     return data['results'];
   } else {
-    throw Exception('Failed to load nearby EV stations');
+    throw Exception('Failed to load nearby service stations');
   }
 }
+
+void main() => runApp(const MaterialApp(home: ServiceStationsScreen()));

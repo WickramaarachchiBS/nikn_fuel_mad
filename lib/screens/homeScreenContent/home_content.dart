@@ -28,30 +28,32 @@ class HomeContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     final String userName = _getUserName();
     return Padding(
       padding: const EdgeInsets.all(0.0),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
-            child: SearchBar(
-              backgroundColor: WidgetStatePropertyAll(const Color.fromARGB(255, 46, 46, 46)),
-              hintText: '',
-              leading: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.search,
-                  color: Colors.red,
-                ),
-              ),
-              shape: WidgetStatePropertyAll(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                ),
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
+          //   child: SearchBar(
+          //     backgroundColor: WidgetStatePropertyAll(const Color.fromARGB(255, 46, 46, 46)),
+          //     hintText: '',
+          //     leading: Padding(
+          //       padding: const EdgeInsets.all(8.0),
+          //       child: Icon(
+          //         Icons.search,
+          //         color: Colors.red,
+          //       ),
+          //     ),
+          //     shape: WidgetStatePropertyAll(
+          //       RoundedRectangleBorder(
+          //         borderRadius: BorderRadius.circular(18.0),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           SizedBox(height: 25.0),
           Container(
             padding: EdgeInsets.only(left: 10),
@@ -135,7 +137,7 @@ class HomeContent extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.only(right: 18.0, left: 18.0, top: 8.0),
+                padding: EdgeInsets.only(left: screenWidth * 0.055, right: screenWidth * 0.055, top: 5.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [

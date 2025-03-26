@@ -46,6 +46,16 @@ class _GasStationsScreenState extends State<GasStationsScreen> {
             },
           );
         }).toSet();
+        if (_initialPosition != null) {
+          _markers.add(
+            Marker(
+              markerId: const MarkerId('my_location'),
+              position: _initialPosition!,
+              infoWindow: const InfoWindow(title: 'My Location'),
+              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            ),
+          );
+        }
       });
     } catch (e) {
       print('Error: $e');
@@ -80,11 +90,12 @@ class _GasStationsScreenState extends State<GasStationsScreen> {
             padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.local_gas_station, color: Colors.amberAccent), // Changed icon to gas station
+                    const Icon(Icons.location_on_outlined, color: Colors.amberAccent), // Changed icon to gas station
                     const SizedBox(width: 10),
                     Text(
                       name,
@@ -97,18 +108,21 @@ class _GasStationsScreenState extends State<GasStationsScreen> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Text(
-                      'Latitude: $lat',
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                    const SizedBox(width: 20),
-                    Text(
-                      'Longitude: $lng',
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Latitude: $lat',
+                        style: const TextStyle(fontSize: 12, color: Colors.white),
+                      ),
+                      const SizedBox(width: 20),
+                      Text(
+                        'Longitude: $lng',
+                        style: const TextStyle(fontSize: 12, color: Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Row(
