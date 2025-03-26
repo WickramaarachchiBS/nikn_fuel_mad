@@ -56,7 +56,7 @@ class HomeContent extends StatelessWidget {
           // ),
           SizedBox(height: 25.0),
           Container(
-            padding: EdgeInsets.only(left: 10),
+            padding: EdgeInsets.only(left: 30),
             alignment: Alignment.centerLeft,
             child: Text.rich(
               TextSpan(
