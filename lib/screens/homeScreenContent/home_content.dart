@@ -143,7 +143,7 @@ class HomeContent extends StatelessWidget {
                   children: [
                     CenterWidget2(
                       onTapped: () {
-                        Navigator.pushNamed(context, '/fuel_distributer');
+                        Navigator.pushNamed(context, '/fuel_order');
                       },
                       color: const Color.fromARGB(193, 9, 38, 82),
                       icon: Icons.local_shipping,

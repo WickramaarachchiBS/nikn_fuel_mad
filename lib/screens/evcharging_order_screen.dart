@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
-class FuelOrderScreen extends StatefulWidget {
-  const FuelOrderScreen({super.key});
+class EvChargingOrderScreen extends StatefulWidget {
+  const EvChargingOrderScreen({super.key});
 
   @override
-  State<FuelOrderScreen> createState() => _FuelOrderScreenState();
+  State<EvChargingOrderScreen> createState() => _EvChargingOrderScreenState();
 }
 
-class _FuelOrderScreenState extends State<FuelOrderScreen> {
+class _EvChargingOrderScreenState extends State<EvChargingOrderScreen> {
   GoogleMapController? mapController;
   LatLng? _initialPosition;
   Set<Marker> _markers = {};
 
   // State variables for selections
-  String _selectedFuel = 'Petrol'; // Default fuel type
-  String _selectedType = 'Octane 92'; // Default type for Petrol
-  double _fuelAmount = 10; // Default fuel amount in liters
+  String _selectedChargingType = 'AC'; // Default charging type
+  String _selectedLevel = 'Level 2 (3-22kW)'; // Default level for AC
+  double _expectedPercentage = 90; // Default expected percentage
 
   @override
   void initState() {
@@ -35,7 +35,7 @@ class _FuelOrderScreenState extends State<FuelOrderScreen> {
             markerId: const MarkerId('my_location'),
             position: _initialPosition!,
             infoWindow: const InfoWindow(title: 'My Location'),
-            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
           ),
         );
       });
@@ -80,7 +80,7 @@ class _FuelOrderScreenState extends State<FuelOrderScreen> {
           ),
           actions: [
             Container(
-              margin: EdgeInsets.only(right: 20.0),
+              margin: const EdgeInsets.only(right: 20.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
@@ -91,10 +91,10 @@ class _FuelOrderScreenState extends State<FuelOrderScreen> {
                 ),
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, '/ev_order');
+                  Navigator.pushNamed(context, '/fuel_order');
                 },
                 child: const Text(
-                  'Switch to EV',
+                  'Switch to Fuel',
                   style: TextStyle(fontSize: 16, color: Colors.orange),
                 ),
               ),
@@ -110,7 +110,7 @@ class _FuelOrderScreenState extends State<FuelOrderScreen> {
                 children: [
                   Text(
                     'Your Location...',
-                    style: TextStyle(color: Colors.limeAccent, fontSize: 15),
+                    style: TextStyle(color: Colors.red, fontSize: 15),
                   ),
                 ],
               ),
@@ -121,7 +121,7 @@ class _FuelOrderScreenState extends State<FuelOrderScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
-                // border: Border.all(color: Colors.blue, width: 2),
+                border: Border.all(color: Colors.blue, width: 2),
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(30),
@@ -140,82 +140,78 @@ class _FuelOrderScreenState extends State<FuelOrderScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            // Fuel Type Selection
+            // Charging Type Selection
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Fuel',
+                    'Charging Type',
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                   Row(
                     children: [
-                      _buildFuelTypeButton('Petrol'),
+                      _buildChargingTypeButton('AC'),
                       const SizedBox(width: 8),
-                      _buildFuelTypeButton('Diesel'),
+                      _buildChargingTypeButton('DC'),
                     ],
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 16),
-            // Fuel Type Options
+            // Level Selection
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Type',
+                    'Level',
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                   Row(
-                    children: _selectedFuel == 'Petrol'
+                    children: _selectedChargingType == 'AC'
                         ? [
-                            _buildTypeButton('Octane 92'),
-                            const SizedBox(width: 8),
-                            _buildTypeButton('Octane 95'),
+                            _buildLevelButton('Level 2 (3-22kW)'),
                           ]
                         : [
-                            _buildTypeButton('Auto Diesel'),
-                            const SizedBox(width: 8),
-                            _buildTypeButton('Super Diesel'),
+                            _buildLevelButton('Level 3 (50-350kW)'),
                           ],
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 16),
-            // Fuel Amount Slider
+            // Expected Percentage Slider
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Fuel Amount',
+                    'Expected Per(%)',
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                   Row(
                     children: [
                       Slider(
-                        value: _fuelAmount,
+                        value: _expectedPercentage,
                         min: 1,
-                        max: 50,
-                        divisions: 49,
-                        label: _fuelAmount.round().toString(),
+                        max: 100,
+                        divisions: 99,
+                        label: _expectedPercentage.round().toString(),
                         onChanged: (value) {
                           setState(() {
-                            _fuelAmount = value;
+                            _expectedPercentage = value;
                           });
                         },
                         activeColor: Colors.grey,
                         inactiveColor: Colors.grey[800],
                       ),
                       Text(
-                        '${_fuelAmount.round()} Ltr',
+                        '${_expectedPercentage.round()}%',
                         style: const TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ],
@@ -230,9 +226,9 @@ class _FuelOrderScreenState extends State<FuelOrderScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   // Handle "Next" button press
-                  print('Selected Fuel: $_selectedFuel');
-                  print('Selected Type: $_selectedType');
-                  print('Fuel Amount: ${_fuelAmount.round()} Ltr');
+                  print('Selected Charging Type: $_selectedChargingType');
+                  print('Selected Level: $_selectedLevel');
+                  print('Expected Percentage: ${_expectedPercentage.round()}%');
                   // Navigate to the next screen or perform an action
                 },
                 style: ElevatedButton.styleFrom(
@@ -254,38 +250,15 @@ class _FuelOrderScreenState extends State<FuelOrderScreen> {
     );
   }
 
-  // Helper method to build fuel type buttons
-  Widget _buildFuelTypeButton(String fuel) {
-    bool isSelected = _selectedFuel == fuel;
+  // Helper method to build charging type buttons
+  Widget _buildChargingTypeButton(String type) {
+    bool isSelected = _selectedChargingType == type;
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedFuel = fuel;
-          // Reset type based on fuel selection
-          _selectedType = fuel == 'Petrol' ? 'Octane 92' : 'Auto Diesel';
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.grey : Colors.grey[800],
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          fuel,
-          style: const TextStyle(color: Colors.white, fontSize: 16),
-        ),
-      ),
-    );
-  }
-
-  // Helper method to build type buttons
-  Widget _buildTypeButton(String type) {
-    bool isSelected = _selectedType == type;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedType = type;
+          _selectedChargingType = type;
+          // Reset level based on charging type
+          _selectedLevel = type == 'AC' ? 'Level 2 (3-22kW)' : 'Level 3 (50-350kW)';
         });
       },
       child: Container(
@@ -296,6 +269,29 @@ class _FuelOrderScreenState extends State<FuelOrderScreen> {
         ),
         child: Text(
           type,
+          style: const TextStyle(color: Colors.white, fontSize: 16),
+        ),
+      ),
+    );
+  }
+
+  // Helper method to build level buttons
+  Widget _buildLevelButton(String level) {
+    bool isSelected = _selectedLevel == level;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedLevel = level;
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.grey : Colors.grey[800],
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          level,
           style: const TextStyle(color: Colors.white, fontSize: 16),
         ),
       ),

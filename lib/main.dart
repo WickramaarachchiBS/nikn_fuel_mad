@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nikn_fuel/screens/dynamic_screen.dart';
+import 'package:nikn_fuel/screens/evcharging_order_screen.dart';
 import 'package:nikn_fuel/screens/evstations_screen.dart';
 import 'package:nikn_fuel/screens/fuel_order_screen.dart';
 import 'package:nikn_fuel/screens/servicestations_screen.dart';
@@ -37,7 +38,8 @@ class MyApp extends StatelessWidget {
         '/fuel_stations': (context) => const GasStationsScreen(),
         '/ev_stations': (context) => const EvStationsScreen(),
         '/service_stations': (context) => const ServiceStationsScreen(),
-        'fuel_order': (context) => const FuelOrderScreen(),
+        '/fuel_order': (context) => const FuelOrderScreen(),
+        '/ev_order': (context) => const EvChargingOrderScreen(),
       },
     );
   }
