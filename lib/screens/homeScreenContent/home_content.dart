@@ -34,7 +34,7 @@ class HomeContent extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
             child: SearchBar(
               backgroundColor: WidgetStatePropertyAll(const Color.fromARGB(255, 46, 46, 46)),
               hintText: '',

@@ -25,7 +25,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/sign_in');
+                Navigator.pushNamed(context, '/home');
               },
               child: Text('Get Started'),
             ),

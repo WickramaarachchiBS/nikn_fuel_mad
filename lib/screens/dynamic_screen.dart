@@ -9,14 +9,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 // import 'package:nikn_fuel/components/navigation.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class DynamicScreen extends StatefulWidget {
+  const DynamicScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<DynamicScreen> createState() => _DynamicScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _DynamicScreenState extends State<DynamicScreen> {
   final _auth = FirebaseAuth.instance;
   late User loggedInUser;
 
@@ -49,17 +49,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final bottomItems = <Widget>[
       Icon(Icons.home_outlined, color: Color.fromARGB(255, 255, 255, 255)),
+      Icon(Icons.local_gas_station_outlined, color: Color.fromARGB(255, 255, 255, 255)),
       Icon(Icons.ev_station_outlined, color: Color.fromARGB(255, 255, 255, 255)),
-      Icon(Icons.explore, color: Color.fromARGB(255, 255, 255, 255)),
       Icon(Icons.person_outlined, color: Color.fromARGB(255, 255, 255, 255)),
     ];
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+        backgroundColor: const Color.fromARGB(255, 120, 120, 120),
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-          leading: Icon(Icons.arrow_back_ios, color: Colors.white),
           title: Text(
             'Nikn Fuel',
             style: TextStyle(
