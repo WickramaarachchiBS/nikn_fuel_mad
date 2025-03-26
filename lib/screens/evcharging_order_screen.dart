@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:nikn_fuel/screens/order_summary_screen.dart';
 
 class EvChargingOrderScreen extends StatefulWidget {
   const EvChargingOrderScreen({super.key});
@@ -225,11 +226,17 @@ class _EvChargingOrderScreenState extends State<EvChargingOrderScreen> {
               padding: const EdgeInsets.all(16),
               child: ElevatedButton(
                 onPressed: () {
-                  // Handle "Next" button press
-                  print('Selected Charging Type: $_selectedChargingType');
-                  print('Selected Level: $_selectedLevel');
-                  print('Expected Percentage: ${_expectedPercentage.round()}%');
-                  // Navigate to the next screen or perform an action
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OrderSummaryScreen(
+                          isFuelOrder: false,
+                          chargingType: _selectedChargingType,
+                          level: _selectedLevel,
+                          expectedPercentage: _expectedPercentage,
+                        ),
+                      ));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,

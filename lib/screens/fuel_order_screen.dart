@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:nikn_fuel/screens/order_summary_screen.dart';
 
 class FuelOrderScreen extends StatefulWidget {
   const FuelOrderScreen({super.key});
@@ -229,11 +230,18 @@ class _FuelOrderScreenState extends State<FuelOrderScreen> {
               padding: const EdgeInsets.all(16),
               child: ElevatedButton(
                 onPressed: () {
-                  // Handle "Next" button press
-                  print('Selected Fuel: $_selectedFuel');
-                  print('Selected Type: $_selectedType');
-                  print('Fuel Amount: ${_fuelAmount.round()} Ltr');
-                  // Navigate to the next screen or perform an action
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OrderSummaryScreen(
+                        isFuelOrder: true,
+                        selectedFuel: _selectedFuel,
+                        selectedType: _selectedType,
+                        fuelAmount: _fuelAmount,
+                      ),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,

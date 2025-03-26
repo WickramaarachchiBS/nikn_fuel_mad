@@ -3,6 +3,7 @@ import 'package:nikn_fuel/screens/dynamic_screen.dart';
 import 'package:nikn_fuel/screens/evcharging_order_screen.dart';
 import 'package:nikn_fuel/screens/evstations_screen.dart';
 import 'package:nikn_fuel/screens/fuel_order_screen.dart';
+import 'package:nikn_fuel/screens/order_summary_screen.dart';
 import 'package:nikn_fuel/screens/servicestations_screen.dart';
 import 'package:nikn_fuel/screens/welcome_screen.dart';
 import 'package:nikn_fuel/screens/signin_sceen.dart';
