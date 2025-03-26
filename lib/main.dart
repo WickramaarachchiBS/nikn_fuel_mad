@@ -26,13 +26,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const EvStationsScreen(),
+      home: const DynamicScreen(),
       routes: {
         '/home': (context) => const DynamicScreen(),
         '/welcome': (context) => const WelcomeScreen(),
         '/sign_in': (context) => const SignInScreen(),
         '/sign_up': (context) => const SignUpScreen(),
-        '/fuel_stations': (context) => const FuelStationScreen(),
+        '/fuel_stations': (context) => const GasStationsScreen(),
         '/ev_stations': (context) => const EvStationsScreen(),
       },
     );
