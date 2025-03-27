@@ -118,12 +118,12 @@ class _EvStationsScreenState extends State<EvStationsScreen> {
                   child: Row(
                     children: [
                       Text(
-                        'Latitude: $lat',
+                        'Latitude: ${lat.toStringAsFixed(6)}',
                         style: TextStyle(fontSize: 12, color: Colors.white),
                       ),
                       const SizedBox(width: 20),
                       Text(
-                        'Longitude: $lng',
+                        'Longitude: ${lng.toStringAsFixed(6)}',
                         style: TextStyle(fontSize: 12, color: Colors.white),
                       ),
                     ],
@@ -191,13 +191,24 @@ class _EvStationsScreenState extends State<EvStationsScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: Icon(
-          Icons.ev_station_outlined,
-          color: Colors.amberAccent,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context); // Go back to the previous screen
+          },
         ),
-        title: Text(
-          'Nearby Charging Stations',
-          style: TextStyle(color: Colors.white),
+        title: Row(
+          children: [
+            const Icon(
+              Icons.ev_station,
+              color: Colors.amberAccent,
+            ),
+            SizedBox(width: 5),
+            Text(
+              'Nearby Charging Stations',
+              style: TextStyle(color: Colors.white, fontSize: 19),
+            ),
+          ],
         ),
       ),
       body: _initialPosition == null

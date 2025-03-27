@@ -98,12 +98,14 @@ class _GasStationsScreenState extends State<GasStationsScreen> {
                   children: [
                     const Icon(Icons.location_on_outlined, color: Colors.amberAccent), // Changed icon to gas station
                     const SizedBox(width: 10),
-                    Text(
-                      name,
-                      style: const TextStyle(
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.amber,
+                    Expanded(
+                      child: Text(
+                        name,
+                        style: const TextStyle(
+                          fontSize: 23,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.amber,
+                        ),
                       ),
                     ),
                   ],
@@ -114,12 +116,12 @@ class _GasStationsScreenState extends State<GasStationsScreen> {
                   child: Row(
                     children: [
                       Text(
-                        'Latitude: $lat',
+                        'Latitude: ${lat.toStringAsFixed(6)}',
                         style: const TextStyle(fontSize: 12, color: Colors.white),
                       ),
                       const SizedBox(width: 20),
                       Text(
-                        'Longitude: $lng',
+                        'Longitude: ${lng.toStringAsFixed(6)}',
                         style: const TextStyle(fontSize: 12, color: Colors.white),
                       ),
                     ],
@@ -184,13 +186,24 @@ class _GasStationsScreenState extends State<GasStationsScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: const Icon(
-          Icons.local_gas_station, // Changed icon to gas station
-          color: Colors.amberAccent,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context); // Go back to the previous screen
+          },
         ),
-        title: const Text(
-          'Nearby Gas Stations', // Updated title
-          style: TextStyle(color: Colors.white),
+        title: Row(
+          children: [
+            Icon(
+              Icons.local_gas_station,
+              color: Colors.amberAccent,
+            ),
+            SizedBox(width: 5),
+            const Text(
+              'Nearby Gas Stations', // Updated title
+              style: TextStyle(color: Colors.white, fontSize: 19),
+            ),
+          ],
         ),
       ),
       body: _initialPosition == null

@@ -116,12 +116,12 @@ class _ServiceStationsScreenState extends State<ServiceStationsScreen> {
                     child: Row(
                       children: [
                         Text(
-                          'Latitude: $lat',
+                          'Latitude: ${lat.toStringAsFixed(6)}',
                           style: const TextStyle(fontSize: 12, color: Colors.white),
                         ),
                         const SizedBox(width: 20),
                         Text(
-                          'Longitude: $lng',
+                          'Longitude: ${lng.toStringAsFixed(6)}',
                           style: const TextStyle(fontSize: 12, color: Colors.white),
                         ),
                       ],
@@ -187,13 +187,21 @@ class _ServiceStationsScreenState extends State<ServiceStationsScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: const Icon(
-          Icons.car_repair, // Updated icon to car repair
-          color: Colors.amberAccent,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context); // Go back to the previous screen
+          },
         ),
-        title: const Text(
-          'Nearby Service Stations', // Updated title
-          style: TextStyle(color: Colors.white),
+        title: Row(
+          children: [
+            const Icon(Icons.car_repair, color: Colors.amberAccent),
+            const SizedBox(width: 5),
+            const Text(
+              'Nearby Service Stations', // Updated title
+              style: TextStyle(color: Colors.white, fontSize: 19),
+            ),
+          ],
         ),
       ),
       body: _initialPosition == null
