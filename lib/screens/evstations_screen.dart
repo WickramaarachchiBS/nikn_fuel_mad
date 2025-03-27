@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:nikn_fuel/constants.dart';
 
 class EvStationsScreen extends StatefulWidget {
   const EvStationsScreen({super.key});
@@ -247,7 +248,7 @@ Future<Position> _getCurrentLocation() async {
 
 //Fetch nearby ev stations
 Future<List<dynamic>> getNearbyEvStations(double latitude, double longitude) async {
-  const apiKey = 'AIzaSyCR9dYjrGjgAZtTIWvOO1U5oKoMtySuUR8';
+  const apiKey = googleMapsApiKey;
   const radius = 5000; // 5 km radius
   const type = 'charging_station'; // Type of place to search for
 

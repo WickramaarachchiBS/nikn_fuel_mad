@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:nikn_fuel/constants.dart';
+import 'package:nikn_fuel/services/stripe_services.dart';
 
 class OrderSummaryScreen extends StatefulWidget {
   final bool isFuelOrder;
@@ -29,17 +33,21 @@ class OrderSummaryScreen extends StatefulWidget {
 }
 
 class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
+  //LOCATION AND DISTANCE
   GoogleMapController? mapController;
   LatLng? _initialPosition;
   Set<Marker> _markers = {};
 
-  double distance = 0.0;
+  double? _roadDistance;
+
   //charging station location
   final double permanentLat = 33.629508;
   final double permanentLng = -117.925069;
 
+  String apiKey = googleMapsApiKey;
+
   // Price for fuel & delivery
-  final double pricePerLiter = 350; // Rs. 350 per liter
+  final double pricePerLiter = 300; // Rs. 350 per liter
   final double deliveryRatePerKm = 50; // Rs. 50 per km
   // Price for EV charging
   final double pricePerPercentage = 150; // Rs. 50 per percentage
@@ -71,14 +79,9 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
             icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
           ),
         );
-        double distanceInMeters = Geolocator.distanceBetween(
-          position.latitude,
-          position.longitude,
-          permanentLat,
-          permanentLng,
-        );
-        distance = distanceInMeters / 1000; // Convert to kilometers
       });
+      // Calculate distance
+      await _calculateRoadDistance(position.latitude, position.longitude);
     } catch (e) {
       print('Error: $e');
     }
@@ -105,6 +108,65 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
     return await Geolocator.getCurrentPosition();
   }
 
+  Future<void> _calculateRoadDistance(double userLat, double userLng) async {
+    final String url =
+        'https://maps.googleapis.com/maps/api/directions/json?origin=$userLat,$userLng&destination=$permanentLat,$permanentLng&mode=driving&key=$apiKey';
+
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['status'] == 'OK') {
+          // Extract the road distance in meters
+          final distanceInMeters = data['routes'][0]['legs'][0]['distance']['value'];
+          print('distanceInMeters: $distanceInMeters');
+          setState(() {
+            _roadDistance = distanceInMeters / 1000; // Convert to kilometers
+          });
+        } else {
+          print('Directions API error: ${data['status']}');
+        }
+      } else {
+        print('Failed to fetch directions: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching road distance: $e');
+    }
+  }
+
+  // STRIPE PAYMENT
+  Future<void> _handlePayment() async {
+    double serviceCost = 0;
+    double deliveryCost = 0;
+    if (_roadDistance != null) {
+      if (widget.isFuelOrder) {
+        serviceCost = pricePerLiter * (widget.fuelAmount ?? 0);
+        deliveryCost = deliveryRatePerKm * _roadDistance!;
+      } else {
+        serviceCost = pricePerPercentage * (widget.expectedPercentage ?? 0);
+        deliveryCost = deliveryRatePerKm * _roadDistance!;
+      }
+    }
+    int totalCost = (serviceCost + deliveryCost).toInt().round();
+
+    try {
+      await StripeService().makePayment(
+        amount: totalCost,
+        currency: 'LKR',
+      );
+      // Show success message
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(content: Text('Payment successful!')),
+      // );
+      // Navigate to success screen or perform any other action
+    } catch (e) {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Payment failed: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Calculate prices
@@ -112,16 +174,19 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
     double deliveryCost = 0;
     double totalCost = 0;
 
-    if (widget.isFuelOrder) {
-      serviceCost = pricePerLiter * (widget.fuelAmount ?? 0);
-      deliveryCost = deliveryRatePerKm * distance;
-      totalCost = serviceCost + deliveryCost;
-    } else {
-      serviceCost = pricePerPercentage * (widget.expectedPercentage ?? 0);
-      deliveryCost = deliveryRatePerKm * distance;
-      totalCost = serviceCost + deliveryCost;
+    if (_roadDistance != null) {
+      if (widget.isFuelOrder) {
+        serviceCost = pricePerLiter * (widget.fuelAmount ?? 0);
+        deliveryCost = deliveryRatePerKm * _roadDistance!;
+        totalCost = serviceCost + deliveryCost;
+      } else {
+        serviceCost = pricePerPercentage * (widget.expectedPercentage ?? 0);
+        deliveryCost = deliveryRatePerKm * _roadDistance!;
+        totalCost = serviceCost + deliveryCost;
+      }
     }
 
+    //UI
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
@@ -175,7 +240,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
               ),
             ),
             Text(
-              'Distance: ${distance.round()} km from our nearest outlet',
+              'Distance: ${_roadDistance.toString()} km from our nearest outlet',
               style: TextStyle(color: Colors.white, fontSize: 15),
             ),
             const SizedBox(height: 16),
@@ -220,7 +285,8 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                           _buildPriceRow('$pricePerPercentage*${widget.expectedPercentage?.round() ?? 0}', serviceCost.toStringAsFixed(0)),
                         const SizedBox(height: 8),
                         if (widget.isFuelOrder)
-                          _buildPriceRow('(Rs.$deliveryRatePerKm per KM) $deliveryRatePerKm*${distance.round()}', deliveryCost.toStringAsFixed(0))
+                          _buildPriceRow(
+                              '(Rs.$deliveryRatePerKm per KM) $deliveryRatePerKm*${_roadDistance.toString()}', deliveryCost.toStringAsFixed(0))
                         else
                           _buildPriceRow('(Rs.$deliveryRatePerKm per KM)$deliveryRatePerKm*${widget.expectedPercentage?.round() ?? 0}',
                               deliveryCost.toStringAsFixed(0)),
@@ -242,6 +308,8 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                   print('Proceeding to payment...');
                   print('Total Cost: Rs. $totalCost');
                   // Navigate to payment screen or perform payment action
+                  // Navigator.pushNamed(context, '/payment');
+                  _handlePayment();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,

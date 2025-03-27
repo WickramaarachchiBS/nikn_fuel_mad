@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:nikn_fuel/constants.dart';
 
 class GasStationsScreen extends StatefulWidget {
   const GasStationsScreen({super.key});
@@ -240,7 +241,7 @@ Future<Position> _getCurrentLocation() async {
 
 // Fetch nearby gas stations
 Future<List<dynamic>> getNearbyGasStations(double latitude, double longitude) async {
-  const apiKey = 'AIzaSyCR9dYjrGjgAZtTIWvOO1U5oKoMtySuUR8'; // Replace with your actual API key
+  const apiKey = googleMapsApiKey; // Replace with your actual API key
   const radius = 5000; // 5 km radius
   const type = 'gas_station'; // Changed to gas stations
 
