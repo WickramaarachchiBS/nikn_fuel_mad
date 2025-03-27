@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nikn_fuel/components/bottom_widget.dart';
 import 'package:nikn_fuel/components/center_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nikn_fuel/screens/paymentUnsuccessfull_screen.dart';
+import 'package:nikn_fuel/screens/paymentsuccessful_screen.dart';
 
 class HomeContent extends StatelessWidget {
   const HomeContent({

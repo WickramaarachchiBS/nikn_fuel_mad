@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:nikn_fuel/constants.dart';
 import 'package:nikn_fuel/services/stripe_services.dart';
+import 'package:nikn_fuel/screens/paymentUnsuccessfull_screen.dart';
+import 'package:nikn_fuel/screens/paymentsuccessful_screen.dart';
 
 class OrderSummaryScreen extends StatefulWidget {
   final bool isFuelOrder;
@@ -159,10 +161,22 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
       //   const SnackBar(content: Text('Payment successful!')),
       // );
       // Navigate to success screen or perform any other action
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const PaymentSuccessfulScreen()),
+      );
     } catch (e) {
       // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Payment failed: $e')),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Payment failed: $e')),
+      // );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PaymentUnsuccessfulScreen(
+            onRetry: _handlePayment, // Pass the retry function
+          ),
+        ),
       );
     }
   }
