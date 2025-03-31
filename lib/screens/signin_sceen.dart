@@ -140,7 +140,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                   // App name or tagline
                   const Text(
-                    'Welcome Back',
+                    'Welcome',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

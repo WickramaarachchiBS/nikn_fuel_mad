@@ -161,32 +161,14 @@ class HomeContent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                'Journey',
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 255, 255, 255),
-                ),
-              ),
-              Text(
-                'Fuel Type',
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 255, 255, 255),
-                ),
-              ),
-              Text(
-                'Charging',
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 255, 255, 255),
-                ),
-              ),
-              Text(
-                'Payments',
+                'Ongoing Tasks',
                 style: TextStyle(
                   color: const Color.fromARGB(255, 255, 255, 255),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 10),
           BottomWidget(),
           // NavBar(),
         ],

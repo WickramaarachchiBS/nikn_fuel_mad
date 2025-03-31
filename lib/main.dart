@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const DynamicScreen(),
+      home: const WelcomeScreen(),
       routes: {
         '/home': (context) => const DynamicScreen(),
         '/welcome': (context) => const WelcomeScreen(),
