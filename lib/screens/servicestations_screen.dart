@@ -253,7 +253,7 @@ Future<Position> _getCurrentLocation() async {
 // Fetch nearby service stations
 Future<List<dynamic>> getNearbyServiceStations(double latitude, double longitude) async {
   const apiKey = googleMapsApiKey; // Replace with your actual API key
-  const radius = 5000; // 5 km radius
+  const radius = 10000; // 5 km radius
   const type = 'car_repair'; // Changed to service stations
 
   final url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&type=$type&key=$apiKey';

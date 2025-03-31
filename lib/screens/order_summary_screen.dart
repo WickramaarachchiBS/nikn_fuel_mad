@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:nikn_fuel/constants.dart';
 import 'package:nikn_fuel/services/stripe_services.dart';
 import 'package:nikn_fuel/screens/paymentUnsuccessfull_screen.dart';
@@ -39,6 +40,8 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
   GoogleMapController? mapController;
   LatLng? _initialPosition;
   Set<Marker> _markers = {};
+  //POLYLINES
+  Set<Polyline> _polylines = {};
 
   double? _roadDistance;
 
@@ -83,7 +86,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
         );
       });
       // Calculate distance
-      await _calculateRoadDistance(position.latitude, position.longitude);
+      await _calculateRoadDistanceAndPolyline(position.latitude, position.longitude);
     } catch (e) {
       print('Error: $e');
     }
@@ -110,7 +113,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
     return await Geolocator.getCurrentPosition();
   }
 
-  Future<void> _calculateRoadDistance(double userLat, double userLng) async {
+  Future<void> _calculateRoadDistanceAndPolyline(double userLat, double userLng) async {
     final String url =
         'https://maps.googleapis.com/maps/api/directions/json?origin=$userLat,$userLng&destination=$permanentLat,$permanentLng&mode=driving&key=$apiKey';
 
@@ -122,9 +125,33 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
           // Extract the road distance in meters
           final distanceInMeters = data['routes'][0]['legs'][0]['distance']['value'];
           print('distanceInMeters: $distanceInMeters');
+
+          //extract polyline points
+          final polylineEncoded = data['routes'][0]['overview_polyline']['points'];
+
+          // Decode polyline points
+          PolylinePoints polylinePoints = PolylinePoints();
+          List<PointLatLng> decodedPoints = polylinePoints.decodePolyline(polylineEncoded);
+          List<LatLng> polylineCoordinates = decodedPoints.map((point) => LatLng(point.latitude, point.longitude)).toList();
+
           setState(() {
             _roadDistance = distanceInMeters / 1000; // Convert to kilometers
+            _polylines.add(
+              Polyline(
+                polylineId: const PolylineId('route'),
+                points: polylineCoordinates,
+                color: Colors.blue,
+                width: 5,
+              ),
+            );
           });
+          // Adjust map bounds to show both markers and polyline
+          if (mapController != null) {
+            LatLngBounds bounds = _calculateBounds(polylineCoordinates);
+            mapController!.animateCamera(
+              CameraUpdate.newLatLngBounds(bounds, 50), // 50 is padding
+            );
+          }
         } else {
           print('Directions API error: ${data['status']}');
         }
@@ -134,6 +161,25 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
     } catch (e) {
       print('Error fetching road distance: $e');
     }
+  }
+
+  LatLngBounds _calculateBounds(List<LatLng> points) {
+    double minLat = points[0].latitude;
+    double maxLat = points[0].latitude;
+    double minLng = points[0].longitude;
+    double maxLng = points[0].longitude;
+
+    for (LatLng point in points) {
+      if (point.latitude < minLat) minLat = point.latitude;
+      if (point.latitude > maxLat) maxLat = point.latitude;
+      if (point.longitude < minLng) minLng = point.longitude;
+      if (point.longitude > maxLng) maxLng = point.longitude;
+    }
+
+    return LatLngBounds(
+      southwest: LatLng(minLat, minLng),
+      northeast: LatLng(maxLat, maxLng),
+    );
   }
 
   // STRIPE PAYMENT
@@ -247,6 +293,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                           zoom: 17,
                         ),
                         markers: _markers,
+                        polylines: _polylines,
                         onMapCreated: (GoogleMapController controller) {
                           mapController = controller;
                         },

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:nikn_fuel/screens/evstations_screen.dart';
+import 'package:nikn_fuel/screens/fuelstations_screen.dart';
 import 'package:nikn_fuel/screens/homeScreenContent/home_content.dart';
 import 'package:nikn_fuel/screens/homeScreenContent/location_content.dart';
 import 'package:nikn_fuel/screens/homeScreenContent/fuel_content.dart';
@@ -40,8 +42,8 @@ class _DynamicScreenState extends State<DynamicScreen> {
   int _currentIndex = 0;
   final List<Widget> _pages = [
     HomeContent(),
-    FuelContent(),
-    LocationContent(),
+    GasStationsScreen(),
+    EvStationsScreen(),
     ProfileContent(),
   ];
 
