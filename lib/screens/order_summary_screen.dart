@@ -8,6 +8,7 @@ import 'package:nikn_fuel/constants.dart';
 import 'package:nikn_fuel/services/stripe_services.dart';
 import 'package:nikn_fuel/screens/paymentUnsuccessfull_screen.dart';
 import 'package:nikn_fuel/screens/paymentsuccessful_screen.dart';
+import 'package:nikn_fuel/services/google_services.dart';
 
 class OrderSummaryScreen extends StatefulWidget {
   final bool isFuelOrder;
@@ -38,18 +39,18 @@ class OrderSummaryScreen extends StatefulWidget {
 class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
   //LOCATION AND DISTANCE
   GoogleMapController? mapController;
+  String apiKey = googleMapsApiKey;
   LatLng? _initialPosition;
   Set<Marker> _markers = {};
-  //POLYLINES
   Set<Polyline> _polylines = {};
-
   double? _roadDistance;
+  String? _travelTime;
+
+  final GoogleServices _googleServices = GoogleServices();
 
   //charging station location
   final double permanentLat = homeDepotLatSL;
   final double permanentLng = homeDepotLngSL;
-
-  String apiKey = googleMapsApiKey;
 
   // Price for fuel & delivery
   final double pricePerLiter = 300; // Rs. 350 per liter
@@ -65,9 +66,13 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
 
   Future<void> _loadUserLocation() async {
     try {
-      Position position = await _getCurrentLocation();
+      LatLng? userLocation = await _googleServices.getCurrentLocation();
+      if (userLocation == null) {
+        throw Exception('Failed to get user location');
+      }
+      LatLng permanentLocation = LatLng(permanentLat, permanentLng);
       setState(() {
-        _initialPosition = LatLng(position.latitude, position.longitude);
+        _initialPosition = userLocation;
         _markers.add(
           Marker(
             markerId: const MarkerId('my_location'),
@@ -85,101 +90,29 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
           ),
         );
       });
-      // Calculate distance
-      await _calculateRoadDistanceAndPolyline(position.latitude, position.longitude);
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
+      // Fetch route details
+      Map<String, dynamic> routeDetails = await _googleServices.getRouteDetails(
+        origin: userLocation,
+        destination: permanentLocation,
+      );
 
-  Future<Position> _getCurrentLocation() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
+      if (routeDetails.isNotEmpty) {
+        setState(() {
+          _roadDistance = routeDetails['distance'];
+          _travelTime = routeDetails['duration'];
+          _polylines.add(routeDetails['polyline']);
+        });
 
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permissions are permanently denied.');
-    }
-
-    return await Geolocator.getCurrentPosition();
-  }
-
-  Future<void> _calculateRoadDistanceAndPolyline(double userLat, double userLng) async {
-    final String url =
-        'https://maps.googleapis.com/maps/api/directions/json?origin=$userLat,$userLng&destination=$permanentLat,$permanentLng&mode=driving&key=$apiKey';
-
-    try {
-      final response = await http.get(Uri.parse(url));
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        if (data['status'] == 'OK') {
-          // Extract the road distance in meters
-          final distanceInMeters = data['routes'][0]['legs'][0]['distance']['value'];
-          print('distanceInMeters: $distanceInMeters');
-
-          //extract polyline points
-          final polylineEncoded = data['routes'][0]['overview_polyline']['points'];
-
-          // Decode polyline points
-          PolylinePoints polylinePoints = PolylinePoints();
-          List<PointLatLng> decodedPoints = polylinePoints.decodePolyline(polylineEncoded);
-          List<LatLng> polylineCoordinates = decodedPoints.map((point) => LatLng(point.latitude, point.longitude)).toList();
-
-          setState(() {
-            _roadDistance = distanceInMeters / 1000; // Convert to kilometers
-            _polylines.add(
-              Polyline(
-                polylineId: const PolylineId('route'),
-                points: polylineCoordinates,
-                color: Colors.blue,
-                width: 5,
-              ),
-            );
-          });
-          // Adjust map bounds to show both markers and polyline
-          if (mapController != null) {
-            LatLngBounds bounds = _calculateBounds(polylineCoordinates);
-            mapController!.animateCamera(
-              CameraUpdate.newLatLngBounds(bounds, 50), // 50 is padding
-            );
-          }
-        } else {
-          print('Directions API error: ${data['status']}');
+        // Adjust map bounds
+        if (mapController != null) {
+          mapController!.animateCamera(
+            CameraUpdate.newLatLngBounds(routeDetails['bounds'], 50),
+          );
         }
-      } else {
-        print('Failed to fetch directions: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error fetching road distance: $e');
+      print('Error loading user location and route: $e');
     }
-  }
-
-  LatLngBounds _calculateBounds(List<LatLng> points) {
-    double minLat = points[0].latitude;
-    double maxLat = points[0].latitude;
-    double minLng = points[0].longitude;
-    double maxLng = points[0].longitude;
-
-    for (LatLng point in points) {
-      if (point.latitude < minLat) minLat = point.latitude;
-      if (point.latitude > maxLat) maxLat = point.latitude;
-      if (point.longitude < minLng) minLng = point.longitude;
-      if (point.longitude > maxLng) maxLng = point.longitude;
-    }
-
-    return LatLngBounds(
-      southwest: LatLng(minLat, minLng),
-      northeast: LatLng(maxLat, maxLng),
-    );
   }
 
   // STRIPE PAYMENT
@@ -202,20 +135,11 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
         amount: totalCost,
         currency: 'LKR',
       );
-      // Show success message
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(content: Text('Payment successful!')),
-      // );
-      // Navigate to success screen or perform any other action
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const PaymentSuccessfulScreen()),
       );
     } catch (e) {
-      // Show error message
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(content: Text('Payment failed: $e')),
-      // );
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -255,7 +179,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
-              Navigator.pop(context); // Go back to the previous screen
+              Navigator.pop(context);
             },
           ),
           title: const SizedBox.shrink(),
@@ -368,8 +292,6 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                   // Handle "Proceed to Payment" button press
                   print('Proceeding to payment...');
                   print('Total Cost: Rs. $totalCost');
-                  // Navigate to payment screen or perform payment action
-                  // Navigator.pushNamed(context, '/payment');
                   _handlePayment();
                 },
                 style: ElevatedButton.styleFrom(
