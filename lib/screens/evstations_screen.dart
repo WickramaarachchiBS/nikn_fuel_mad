@@ -260,10 +260,12 @@ Future<Position> _getCurrentLocation() async {
 //Fetch nearby ev stations
 Future<List<dynamic>> getNearbyEvStations(double latitude, double longitude) async {
   const apiKey = googleMapsApiKey;
-  const radius = 5000; // 5 km radius
-  const type = 'charging_station'; // Type of place to search for
+  const radius = 10000; // 5 km radius
+  const type = 'charging_station';
+  const keyword = 'charging_station';
 
-  final url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&type=$type&key=$apiKey';
+  final url =
+      'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&keyword=$keyword&type=$type&key=$apiKey';
 
   final response = await http.get(Uri.parse(url));
   print(response.body);

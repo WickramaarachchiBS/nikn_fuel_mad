@@ -43,8 +43,8 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
   double? _roadDistance;
 
   //charging station location
-  final double permanentLat = 33.629508;
-  final double permanentLng = -117.925069;
+  final double permanentLat = homeDepotLatSL;
+  final double permanentLng = homeDepotLngSL;
 
   String apiKey = googleMapsApiKey;
 
