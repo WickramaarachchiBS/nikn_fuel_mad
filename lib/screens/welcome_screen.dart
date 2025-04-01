@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nikn_fuel/screens/signin2.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -54,12 +53,7 @@ class WelcomeScreen extends StatelessWidget {
                     margin: EdgeInsets.only(right: 30),
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SignIn(),
-                          ),
-                        );
+                        Navigator.pushReplacementNamed(context, '/sign_in');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFFE7121C),

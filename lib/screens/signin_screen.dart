@@ -3,51 +3,40 @@ import 'package:flutter/material.dart';
 import 'package:nikn_fuel/components/textfield_widget.dart';
 import 'package:nikn_fuel/services/firebase_auth.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  TextEditingController usernameController = TextEditingController();
+class _SignInScreenState extends State<SignInScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController nicController = TextEditingController();
 
   bool isLoading = false;
 
   @override
   void dispose() {
-    usernameController.dispose();
     emailController.dispose();
     passwordController.dispose();
-    nicController.dispose();
     super.dispose();
   }
 
-  Future<void> register() async {
+  Future<void> signIn() async {
     setState(() {
       isLoading = true;
     });
-
     try {
-      await authService.value.signUp(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-        username: usernameController.text.trim(),
-        nic: nicController.text.trim(),
-      );
+      await authService.value.signIn(email: emailController.text.trim(), password: passwordController.text.trim());
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Registration successful!'), backgroundColor: Colors.green),
+        SnackBar(content: Text('Sign in successful!'), backgroundColor: Colors.green),
       );
-      Navigator.pushReplacementNamed(context, '/sign_in');
+      Navigator.pushReplacementNamed(context, '/home');
     } on FirebaseAuthException catch (e) {
-      // Handle error
-      print(e.message);
+      print(e);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message ?? 'Registration failed'), backgroundColor: Colors.red),
+        SnackBar(content: Text(e.message ?? 'Sign in failed'), backgroundColor: Colors.red),
       );
     }
     setState(() {
@@ -91,12 +80,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     fontFamily: 'Montserrat',
                   ),
                 ),
-                SizedBox(height: 100),
+                SizedBox(height: 200),
                 Container(
                   margin: EdgeInsets.only(left: 27),
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Register",
+                    "Let's sign you in",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       color: Colors.white,
@@ -106,35 +95,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 SizedBox(height: 20),
-                // Username field
+                // Email field
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextFieldWidget(hintText: 'Username*', icon: Icons.person, controller: usernameController),
+                  child: TextFieldWidget(
+                    hintText: 'Username*',
+                    icon: Icons.person,
+                    controller: emailController,
+                  ),
                 ),
                 SizedBox(height: 20),
                 // Password field
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextFieldWidget(hintText: 'Email*', icon: Icons.email, controller: emailController),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextFieldWidget(hintText: 'Password*', icon: Icons.lock, controller: passwordController, obscureText: true),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextFieldWidget(hintText: 'NIC*', icon: Icons.badge, controller: nicController),
+                  child: TextFieldWidget(
+                    hintText: 'Password*',
+                    icon: Icons.lock,
+                    controller: passwordController,
+                    obscureText: true,
+                  ),
                 ),
                 SizedBox(height: 30),
-                // Register button]
+                // Sign In button
                 isLoading
                     ? CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                        color: Color(0xFFE7121C),
                       )
                     : ElevatedButton(
-                        onPressed: register,
+                        onPressed: signIn,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFFE7121C),
                           padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
@@ -143,7 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                         child: Text(
-                          'Register',
+                          'Sign In',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 17,
@@ -153,13 +141,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                 SizedBox(height: 20),
+
                 TextButton(
                   onPressed: () {
-                    // Navigate back to the sign-in screen
-                    Navigator.pushReplacementNamed(context, '/sign_in');
+                    // Add forgot password logic
                   },
                   child: Text(
-                    'Sign In',
+                    'Forgot password?',
+                    style: TextStyle(color: Color(0xFFE7121C)),
+                  ),
+                ),
+
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, '/sign_up');
+                  },
+                  child: Text(
+                    'Create New Account',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

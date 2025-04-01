@@ -28,6 +28,11 @@ class HomeContent extends StatelessWidget {
     }
   }
 
+  String capitalizeFirstLetter(String text) {
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1).toLowerCase();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -71,14 +76,14 @@ class HomeContent extends StatelessWidget {
                 ),
                 children: [
                   TextSpan(
-                    text: userName,
+                    text: capitalizeFirstLetter(userName),
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: Colors.grey.shade200,
                     ),
                   ),
                   const TextSpan(
-                    text: ' !',
+                    text: ' ',
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: Colors.red,

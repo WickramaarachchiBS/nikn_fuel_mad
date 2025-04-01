@@ -5,12 +5,11 @@ import 'package:nikn_fuel/screens/dynamic_screen.dart';
 import 'package:nikn_fuel/screens/evcharging_order_screen.dart';
 import 'package:nikn_fuel/screens/evstations_screen.dart';
 import 'package:nikn_fuel/screens/fuel_order_screen.dart';
-import 'package:nikn_fuel/screens/order_summary_screen.dart';
 import 'package:nikn_fuel/screens/payment_screen.dart';
 import 'package:nikn_fuel/screens/servicestations_screen.dart';
-import 'package:nikn_fuel/screens/welcome_screen.dart';
-import 'package:nikn_fuel/screens/signin_sceen.dart';
+import 'package:nikn_fuel/screens/signin_screen.dart';
 import 'package:nikn_fuel/screens/signup_screen.dart';
+import 'package:nikn_fuel/screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:nikn_fuel/screens/fuelstations_screen.dart';
 import 'constants.dart';
@@ -25,7 +24,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
