@@ -83,17 +83,17 @@ class HomeContent extends StatelessWidget {
                     ),
                   ),
                   const TextSpan(
-                    text: ' ',
+                    text: ' !',
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
-                      color: Colors.red,
+                      color: Colors.redAccent,
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 20),
 
           // widgets
           Column(
@@ -106,21 +106,23 @@ class HomeContent extends StatelessWidget {
                     onTapped: () {
                       Navigator.pushNamed(context, '/fuel_stations');
                     },
-                    color: const Color.fromARGB(255, 61, 15, 15),
-                    icon: Icons.local_gas_station,
+                    color1: const Color.fromARGB(255, 0, 0, 0),
+                    color2: const Color.fromARGB(255, 255, 229, 41),
+                    icon: Icons.local_gas_station_outlined,
                     title: 'Fuel Stations',
                   ),
                   CenterWidget(
                     onTapped: () {
                       Navigator.pushNamed(context, '/ev_stations');
                     },
-                    color: const Color.fromARGB(255, 113, 93, 43),
-                    icon: Icons.ev_station,
+                    color1: const Color.fromARGB(255, 0, 0, 0),
+                    color2: const Color.fromARGB(255, 60, 179, 255),
+                    icon: Icons.ev_station_outlined,
                     title: 'EV Stations',
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -128,7 +130,8 @@ class HomeContent extends StatelessWidget {
                     onTapped: () {
                       Navigator.pushNamed(context, '/service_stations');
                     },
-                    color: const Color.fromARGB(255, 17, 53, 33),
+                    color1: const Color.fromARGB(255, 35, 188, 100),
+                    color2: const Color.fromARGB(255, 0, 0, 0),
                     icon: Icons.garage_outlined,
                     title: 'Service Stations',
                   ),
@@ -136,13 +139,14 @@ class HomeContent extends StatelessWidget {
                     onTapped: () {
                       Navigator.pushNamed(context, '/deals');
                     },
-                    color: const Color.fromARGB(255, 49, 19, 63),
-                    icon: Icons.redeem,
+                    color1: const Color.fromARGB(255, 176, 52, 228),
+                    color2: const Color.fromARGB(255, 0, 0, 0),
+                    icon: Icons.redeem_outlined,
                     title: 'Deals',
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               Padding(
                 padding: EdgeInsets.only(left: screenWidth * 0.055, right: screenWidth * 0.055, top: 5.0),
                 child: Row(
@@ -152,8 +156,10 @@ class HomeContent extends StatelessWidget {
                       onTapped: () {
                         Navigator.pushNamed(context, '/fuel_order');
                       },
-                      color: const Color.fromARGB(193, 9, 38, 82),
-                      icon: Icons.local_shipping,
+                      color1: const Color.fromARGB(255, 98, 27, 129),
+                      color2: const Color.fromARGB(255, 0, 0, 0),
+                      color3: const Color.fromARGB(255, 64, 174, 169),
+                      icon: Icons.local_shipping_outlined,
                       title: 'Mobile Fuel \nDistributer',
                     ),
                   ],

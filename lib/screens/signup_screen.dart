@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nikn_fuel/components/textfield_widget.dart';
 import 'package:nikn_fuel/services/firebase_auth.dart';
+import 'package:nikn_fuel/components/snakbarMessagePopup.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -40,14 +41,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
         nic: nicController.text.trim(),
       );
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Registration successful!'), backgroundColor: Colors.green),
+        SnackBar(
+          content: Text('Registration successful!'),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.only(top: 50, left: 10, right: 10),
+          duration: Duration(seconds: 3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
       Navigator.pushReplacementNamed(context, '/sign_in');
     } on FirebaseAuthException catch (e) {
       // Handle error
       print(e.message);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message ?? 'Registration failed'), backgroundColor: Colors.red),
+        SnackBar(
+          content: Text(e.message ?? 'Registration failed'),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.only(top: 50, left: 10, right: 10),
+          duration: Duration(seconds: 3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     }
     setState(() {

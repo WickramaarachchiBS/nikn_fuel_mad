@@ -88,21 +88,21 @@ class _DynamicScreenState extends State<DynamicScreen> {
         body: SingleChildScrollView(
           child: _pages[_currentIndex],
         ),
-        bottomNavigationBar: CurvedNavigationBar(
-          items: bottomItems,
-          index: _currentIndex,
-          height: 47.0,
-          backgroundColor: Colors.transparent,
-          buttonBackgroundColor: const Color.fromARGB(255, 65, 50, 50),
-          color: Color.fromARGB(255, 59, 59, 59),
-          animationCurve: Curves.easeInOut,
-          animationDuration: Duration(milliseconds: 400),
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-        ),
+        // bottomNavigationBar: CurvedNavigationBar(
+        //   items: bottomItems,
+        //   index: _currentIndex,
+        //   height: 47.0,
+        //   backgroundColor: Colors.transparent,
+        //   buttonBackgroundColor: const Color.fromARGB(255, 65, 50, 50),
+        //   color: Color.fromARGB(255, 59, 59, 59),
+        //   animationCurve: Curves.easeInOut,
+        //   animationDuration: Duration(milliseconds: 400),
+        //   onTap: (index) {
+        //     setState(() {
+        //       _currentIndex = index;
+        //     });
+        //   },
+        // ),
       ),
     );
   }

@@ -30,13 +30,31 @@ class _SignInScreenState extends State<SignInScreen> {
     try {
       await authService.value.signIn(email: emailController.text.trim(), password: passwordController.text.trim());
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Sign in successful!'), backgroundColor: Colors.green),
+        SnackBar(
+          content: Text('Sign in successful!'),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.only(top: 50, left: 10, right: 10),
+          duration: Duration(seconds: 3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
       Navigator.pushReplacementNamed(context, '/home');
     } on FirebaseAuthException catch (e) {
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message ?? 'Sign in failed'), backgroundColor: Colors.red),
+        SnackBar(
+          content: Text('${e.message} Sign in failed'),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.only(top: 50, left: 10, right: 10),
+          duration: Duration(seconds: 3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
       );
     }
     setState(() {
