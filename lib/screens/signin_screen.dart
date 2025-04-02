@@ -117,8 +117,8 @@ class _SignInScreenState extends State<SignInScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextFieldWidget(
-                    hintText: 'Username*',
-                    icon: Icons.person,
+                    hintText: 'Email*',
+                    icon: Icons.mail,
                     controller: emailController,
                   ),
                 ),
