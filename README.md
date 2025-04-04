@@ -1,16 +1,12 @@
 # nikn_fuel
 
-A new Flutter project.
+A fuel delivering Mobile App
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+github link - 'https://github.com/WickramaarachchiBS/nikn_fuel_mad.git'
 
-A few resources to get you started if this is your first Flutter project:
+DEMO Username - banuka@gmail.com
+     Password - 123456
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+or You can register 
