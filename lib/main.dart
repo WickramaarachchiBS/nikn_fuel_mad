@@ -1,52 +1,99 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:nikn_fuel/screens/deals_screen.dart';
-import 'package:nikn_fuel/screens/dynamic_screen.dart';
-import 'package:nikn_fuel/screens/evcharging_order_screen.dart';
-import 'package:nikn_fuel/screens/evstations_screen.dart';
-import 'package:nikn_fuel/screens/fuel_order_screen.dart';
-import 'package:nikn_fuel/screens/payment_screen.dart';
-import 'package:nikn_fuel/screens/servicestations_screen.dart';
-import 'package:nikn_fuel/screens/signin_screen.dart';
-import 'package:nikn_fuel/screens/signup_screen.dart';
-import 'package:nikn_fuel/screens/welcome_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:nikn_fuel/screens/fuelstations_screen.dart';
-import 'constants.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  Stripe.publishableKey = stripePublishableKey;
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'RefuelX',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              //logo
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 50),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.red,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundColor: Colors.transparent,
+                      backgroundImage: AssetImage('assets/logo.png'),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 100),
+              // Welcome text
+              Text(
+                'Skip the\nPump – Get\nFuel\nDelivered\nInstantly!',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w900,
+                  fontFamily: 'Montserrat',
+                ),
+              ),
+              SizedBox(height: 100),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 30),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/sign_in');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFFE7121C),
+                        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Get Started',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'Montserrat',
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Icon(
+                            Icons.arrow_forward,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
-      home: const WelcomeScreen(),
-      routes: {
-        '/home': (context) => const DynamicScreen(),
-        '/welcome': (context) => const WelcomeScreen(),
-        '/sign_in': (context) => const SignInScreen(),
-        '/sign_up': (context) => const SignUpScreen(),
-        '/fuel_stations': (context) => const GasStationsScreen(),
-        '/ev_stations': (context) => const EvStationsScreen(),
-        '/service_stations': (context) => const ServiceStationsScreen(),
-        '/fuel_order': (context) => const FuelOrderScreen(),
-        '/ev_order': (context) => const EvChargingOrderScreen(),
-        '/payment': (context) => const PaymentScreen(),
-        '/deals': (context) => const DealsScreen(),
-      },
     );
   }
 }
+
+
+
+
+
