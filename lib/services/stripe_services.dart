@@ -61,7 +61,7 @@ class StripeService {
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
           paymentIntentClientSecret: clientSecret,
-          merchantDisplayName: 'Your App Name',
+          merchantDisplayName: 'ReFuelX',
           // Optional: Add customer details if needed
           // customerId: 'customer_id',
           // customerEphemeralKeySecret: 'ephemeral_key',
