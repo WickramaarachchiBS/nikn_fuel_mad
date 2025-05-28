@@ -1,10 +1,10 @@
-# NIKN Fuel
+# RefuelX
 
 A mobile application for fuel delivery services built with Flutter.
 
 ## Overview
 
-NIKN Fuel is a convenient solution that allows users to order fuel delivery directly to their location. This application streamlines the fuel delivery process through a user-friendly mobile interface.
+RefuelX is a convenient solution that allows users to order fuel delivery directly to their location. This application streamlines the fuel delivery process through a user-friendly mobile interface.
 
 ## Features
 
